@@ -1,0 +1,6 @@
+1.删除pre_works.sh中的sed -i '13a\. /etc/auto_wifi.sh' /etc/init.d/rc.local，不要开机启动wifi模式
+2.安装hostap 使用make install命令。
+3.修改hostap.conf中的加密CCMP为TKIP
+4.修改/et/NetworkManger/NetworkManger.conf
+5.代码中的端口复用问题，关闭socket时端口释放不及时导致再次绑定端口失败。
+6.重新启动network-manager服务

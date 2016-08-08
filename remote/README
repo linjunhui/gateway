@@ -1,0 +1,2 @@
+1.安装upnp库，./configure make && make install
+

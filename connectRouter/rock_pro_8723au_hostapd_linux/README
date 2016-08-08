@@ -1,0 +1,15 @@
+# Installation
+
+Compilation needs your networks function well
+
+install the target 
+	make install
+
+# Usage
+	make install
+	make clean
+	make uninstall
+
+Example:
+	make install  #enable hostap
+	make clean    #disable hostap

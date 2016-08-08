@@ -1,0 +1,6 @@
+1.可以使用如下命令行让板子连接到wifi
+  nmcli dev connect LQS_902 password 1234567890
+2.板子应该安装nfs-common
+3.板子安装gcc
+4.板子安装hostap 详细见connectRouter目录下README
+

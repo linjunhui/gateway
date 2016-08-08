@@ -1,0 +1,2 @@
+void dealmsg(char msg[], int length, int connfd) ;
+void assemPdu(short msgtype, int ip, char *content, int connfd);
