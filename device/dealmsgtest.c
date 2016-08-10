@@ -35,10 +35,13 @@ int main() {
 	ndev1->msgtype = 0x0004;
 	ndev1->deviceIP = 0xc0a80390;
 	char *name = "格力空调";
+	char *id = "123456";
+	memcpy(ndev1->deviceID, id, 9);
 	memset(ndev1->name, 0, 21);
 	memcpy(ndev1->name, name, 21);
 
 	ndev1->attrs[0] = atr1;
+	ndev1->pNext = NULL;
 	
 	list_add(deviceLinklist, ndev1); 
 
@@ -51,6 +54,7 @@ int main() {
 	memcpy(ndev2->name, name2, 21);
 
 	ndev2->attrs[0] = atr1;
+	ndev2->pNext = NULL;
 	
 	list_add(deviceLinklist, ndev2); 
 
@@ -62,6 +66,7 @@ int main() {
 	memcpy(ndev3->name, name3, 21);
 
 	ndev3->attrs[0] = atr1;
+	ndev3->pNext = NULL;
 	
 	list_add(deviceLinklist, ndev3); 
 
@@ -83,14 +88,16 @@ int main() {
 	listen(sockfd, 1000);
  	
  	while(1) {
-		if ((connfd = accept(sockfd, NULL, NULL)) == -1) {
+ 		int len = sizeof(peeraddr);
+		if ((connfd = accept(sockfd, (struct sockaddr*)&peeraddr, &len)) == -1) {
 				printf("error\n");
 				printf("%s\n", strerror(errno));
 				close(connfd);
-		} else if((pid = fork()) == 0 ) {
+		} else if((pid = vfork()) == 0 ) {
 			int tmpfd = connfd,i;
 			char buf[200];
 			int buflen;
+			printf("%s\n", inet_ntoa(peeraddr.sin_addr));
 			printf("child process : %ld  tmpfd:%d\n", (long)getpid(), tmpfd);
 			buflen = recv(tmpfd, buf, 200, 0);
 			buf[buflen] = '\0';

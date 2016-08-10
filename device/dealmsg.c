@@ -39,6 +39,25 @@ void dealmsg(char msg[], int length, int connfd, PdevicelistNode deviceLinklist)
 		
 		//向APP发送设备信息
 		sendDevicePdu(ndev, connfd, deviceLinklist);
+	} else if(0x0005 == msgtype) {
+		PdevicelistNode devices[100];
+
+		printf("this is device message\n");
+		printf("dealing device message\n");
+
+		PdevicelistNode ndev1 = (PdevicelistNode)malloc(sizeof(devicelistNode));
+		memcpy(ndev1, msg, 410);
+		ndev1->msgtype = 0x0004;
+		ndev1->pNext = NULL;
+		printf("%s\n", ndev1->name);
+		printf("%s\n", ndev1->deviceID);
+		remove_from_list(deviceLinklist, ndev1->deviceID);
+
+
+		list_add(deviceLinklist, ndev1);
+
+		int count = traverse_list(deviceLinklist, devices, 100 );
+		printf("sum:%d\n", count);
 	}
 
 
@@ -46,15 +65,15 @@ void dealmsg(char msg[], int length, int connfd, PdevicelistNode deviceLinklist)
 }
 
 void sendDevicePdu(PdevicelistNode ndev, int connfd, PdevicelistNode deviceLinklist) {
-	int i , count = 0;
+	int i ,j, count = 0;
 	//定义一个数组来在遍历时存储所有节点的地址
 	PdevicelistNode devices[100];
 
 	count = traverse_list(deviceLinklist, devices, 100 );
 	printf("count %d\n", count);
 
-	for (i = 0; i < count; ++i) {
-		//unsigned char buf[500];
+	for (i = count-1; i >= 0; --i) {
+		// unsigned char buf[500];
 		// memcpy(buf, &devices[i]->msgtype,2);
 		// memcpy(buf+2, &devices[i]->deviceIP, 4);
 		// memcpy(buf+6, &devices[i]->name, 21);
@@ -66,13 +85,20 @@ void sendDevicePdu(PdevicelistNode ndev, int connfd, PdevicelistNode deviceLinkl
 		memset(buf, 0,410);
 		memcpy(buf, devices[i],410);
 		send(connfd, buf, 410, 0);
-		
-		//printf("buf[2]%s   %p\n", &devices[i]->name, devices[i]);
+		// sleep(1);
+		printf("buf[2]%s   %p\n", &devices[i]->name, devices[i]);
 		//send(connfd, buf, 410, 0);
 		
 	}
-		
+	
 	char buf[500];
+	// memcpy(buf, devices[0],410);
+	// for (j = 0; j < 410; ++j)
+	// {
+	// 	printf("%02x ", buf[j]&0xFF);
+	// }
+
+	
 	memset(buf, 0,410);
 	// send(connfd, buf, 414, 0);
 	send(connfd, buf, 410, 0);

@@ -46,31 +46,36 @@ void dealmsg(char msg[], int length, int connfd, PdevicelistNode deviceLinklist)
 }
 
 void sendDevicePdu(PdevicelistNode ndev, int connfd, PdevicelistNode deviceLinklist) {
-	int i , count;
+	int i ,j , count = 0;
 	//定义一个数组来在遍历时存储所有节点的地址
 	PdevicelistNode devices[100];
 
 	count = traverse_list(deviceLinklist, devices, 100 );
+	printf("count %d\n", count);
 
 	for (i = 0; i < count; ++i) {
-		unsigned char buf[500];
-		memcpy(buf, &devices[i]->msgtype,2);
-		memcpy(buf+2, &devices[i]->deviceIP, 4);
-		memcpy(buf+6, &devices[i]->name, 21);
+		//unsigned char buf[500];
+		// memcpy(buf, &devices[i]->msgtype,2);
+		// memcpy(buf+2, &devices[i]->deviceIP, 4);
+		// memcpy(buf+6, &devices[i]->name, 21);
 		// memcpy(buf+27, &ndev->deviceID, 9);
 		// memcpy(buf+36, &ndev->locked, 1);
 		// memcpy(buf+37, &ndev->gateID, 13);
+
+		unsigned char buf[500];
+		memset(buf, 0,410);
+		memcpy(buf, devices[i],410);
+		send(connfd, buf, 410, 0);
 		
-		
-		printf("buf[2]%s   %p\n", &devices[i]->name, devices[i]);
-		send(connfd, buf, 414, 0);
+		//printf("buf[2]%s   %p\n", &devices[i]->name, devices[i]);
+		//send(connfd, buf, 410, 0);
 		
 	}
 		
 	char buf[500];
-	memcpy(buf, devices[1],414);
-	send(connfd, buf, 414, 0);
-	send(connfd, NULL, 0, 0);
+	memset(buf, 0,410);
+	// send(connfd, buf, 414, 0);
+	send(connfd, buf, 410, 0);
 	close(connfd);
 
 }

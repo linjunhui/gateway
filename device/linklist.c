@@ -2,6 +2,7 @@
 # include <stdio.h>
 # include <malloc.h>
 # include <stdlib.h>
+#include <string.h>
 #include "linklist.h"
 
 PdevicelistNode create_list(void) {
@@ -36,4 +37,21 @@ int traverse_list(PdevicelistNode pHead, PdevicelistNode* devices, int n ) {
 	}
 
 	return count;
+}
+
+void remove_from_list(PdevicelistNode pHead, char *deviceID) {
+		PdevicelistNode p = pHead->pNext;
+		PdevicelistNode tmp;
+	int count = 0;
+
+	while(NULL !=p && strcmp(p->deviceID, deviceID) != 0) {
+		tmp = p;
+		printf("find %s\n", p->deviceID);
+		p = p->pNext;
+
+	}
+	printf("deviceID:%s\n", deviceID);
+
+	if(NULL != p)
+		tmp->pNext = p->pNext;
 }

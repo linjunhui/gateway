@@ -13,6 +13,8 @@ int main() {
 
 	int fd;
 	char *buf = "asddfgg";
+
+	printf("X:%x", buf[7]);
 	char *buff = "1";
 	fd = open("test1", O_RDWR);
 	if (fd == -1) {

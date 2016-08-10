@@ -34,7 +34,7 @@ int traverse_list(PdevicelistNode pHead, PdevicelistNode* devices, int n );
 int is_empty(PdevicelistNode pHead);
 int length_list(PdevicelistNode);
 int list_add(PdevicelistNode pdevicelist, PdevicelistNode deviceNode); 
-
+void remove_from_list(PdevicelistNode pHead, char *deviceID);
 
 
 #endif
