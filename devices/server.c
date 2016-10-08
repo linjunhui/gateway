@@ -2,25 +2,63 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <string.h>
+#include <stdlib.h>
 #include <errno.h>
+#include "devicelink.h"
 
-void thread1(int a) {
+//声明一个device_link指向 设备链表
+pdevice_link device_link;
+
+void thread1(int connfd) {
 	char buf[300];
 	int buflen;
 	short msgtype;
 
 	//返回接收到的数据长度
 	buflen = recv(connfd, buf, 300, 0);
+	printf("buf0 = %d\n", buf[0]);
+	printf("buf1 = %d\n", buf[1]);
 
-	memcpy(msgtype, buf, 2);
+	memcpy(&msgtype, buf, 2);
+	printf("buflen = %d\n", buflen);
+	printf("msgtype = %d\n", msgtype);
+
+	//msgtype = 0x0002;
 	//如果msgtype == 0x0002 将消息当作设备消息处理
 	if (msgtype == 0x0002) {
-		//申请空间创建节点 将设备信息存入到链表中
+		//申请空间创建节点 将设备信息存入到链表中 乘以2 倍以后free不会出错
+		pdevice_node pnode =(pdevice_node)malloc(sizeof(device_node)*2);
+		pnode->pNext = NULL;
+		//memcpy(pnode->device_id, "123456", 7);
+		memcpy(pnode, buf+2, 284);
+
+		//通过id查找链表中的此设备, 删除此设备，重新加入新的节点信息
+		printf("%s\n", pnode->device_id);
+		printf("%s\n", pnode->name);
+
+		pnode->online = 'y';
+		printf("pnode->online:%c\n", pnode->online);
+		remove_from_list(device_link, pnode->device_id);
+
+		list_add(device_link, pnode);
+
+
 	} else if (msgtype == 0x0004) {
-		//处理来自APP的消息
+		//处理来自APP的消息 
 		
 	}
-	printf("有设备接入，连接id: connfd = %d\n", a);
+
+
+	printf("有设备接入，连接id: connfd = %d\n", connfd);
+	traverse_list(device_link);
+}
+
+void list_thread(pdevice_link device_link) {
+	while(1) {
+		traverse_list_off(device_link);
+		sleep(60);
+	}
+
 }
 
 int main(int argc, char const *argv[])
@@ -55,7 +93,11 @@ int main(int argc, char const *argv[])
 	//开始监听, 设置监听队列中的最大等待个数
 	err = listen(sockfd, 1000);
 	printf("绑定结果%s\n", strerror(err));
-
+//==============设备链表相关==============
+	device_link = create_list();
+	//开一个线程没隔一分钟将所有设备 设置为离线
+	err = pthread_create(&thread1_id, NULL, (void *)list_thread, device_link);
+		printf("链表创建线程结果%s\n", strerror(err));
 //==============新建线程处理连接==========
 	int i = 10;
 	//多个线程使用同一个线程id变量，无影响，这只是系统创建线程时返回给用户的一个id,改变其值对线程无影响
@@ -68,6 +110,7 @@ int main(int argc, char const *argv[])
 
 		err = pthread_create(&thread1_id, NULL, (void *)thread1, connfd);
 		printf("创建线程结果%s\n", strerror(err)); 
+
 	}
 	
 
