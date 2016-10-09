@@ -61,6 +61,57 @@ void list_thread(pdevice_link device_link) {
 
 }
 
+
+void adver_gateip(void) {
+	//创建一个发送的socket
+	int sockfd;
+	struct sockaddr_in addr, c_addr;
+	socklen_t addr_len, c_addr_len;
+	char buf[50] = {'c','\0', '\r', '\n'};
+	int len, err;
+	const int on = 1;
+
+	//创建UDP socket
+	sockfd = socket(AF_INET,SOCK_DGRAM,0);
+	printf("创建UDP socket结果%s \n", strerror(errno));
+
+	memset(&addr,0,sizeof(addr));
+	addr.sin_family = AF_INET;
+	addr.sin_addr.s_addr = INADDR_ANY;
+	addr.sin_port = htons(7575);	
+	addr_len=sizeof(addr);
+
+	//客户端地址
+	memset(&c_addr,0,sizeof(c_addr));
+	c_addr.sin_family = AF_INET;
+	c_addr.sin_addr.s_addr = htonl(INADDR_BROADCAST); 
+	c_addr.sin_port = htons(7576);	
+	c_addr_len=sizeof(c_addr);
+
+	setsockopt(sockfd,SOL_SOCKET, SO_BROADCAST,&on,sizeof(on));
+
+	//绑定socket 和 地址
+	err = bind(sockfd, (struct sockaddr *)&addr, sizeof(addr));
+	printf("UDP绑定结果%s\n", strerror(err));
+
+
+	while(1) {
+	//阻塞在这里接受消息
+	len = recvfrom(sockfd, buf, 50, 0, (struct sockaddr*)&addr, &addr_len);
+	printf("UDP接收%s \n", strerror(errno));
+	printf("收到消息:%s\n", buf);
+
+	//发送消息
+	len = sendto(sockfd, "buf", 50, 0, (struct sockaddr*)&c_addr, c_addr_len);
+	printf("UDP发送%s \n", strerror(errno));
+	printf("len = %d\n", len);
+	printf("发送消息\n");
+	}
+
+
+
+
+}
 int main(int argc, char const *argv[])
 {
 	//创建socket
@@ -98,6 +149,9 @@ int main(int argc, char const *argv[])
 	//开一个线程没隔一分钟将所有设备 设置为离线
 	err = pthread_create(&thread1_id, NULL, (void *)list_thread, device_link);
 		printf("链表创建线程结果%s\n", strerror(err));
+
+//========新新建线程处理设备广播消息告知设备 网关ip
+err = pthread_create(&thread1_id, NULL, (void *)adver_gateip, NULL);
 //==============新建线程处理连接==========
 	int i = 10;
 	//多个线程使用同一个线程id变量，无影响，这只是系统创建线程时返回给用户的一个id,改变其值对线程无影响

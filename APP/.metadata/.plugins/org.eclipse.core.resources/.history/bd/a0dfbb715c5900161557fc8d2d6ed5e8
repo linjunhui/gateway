@@ -1,0 +1,76 @@
+package com.cqupt.demov1;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.nio.ByteBuffer;
+
+import org.apache.http.util.ByteArrayBuffer;
+
+import android.os.Message;
+
+public class homeProtocol {
+	//in_addr 转ip字符串
+	public String inAddrtoIP(int addr) {
+		
+		StringBuffer sb=new StringBuffer(""); 
+		sb.append(String.valueOf(addr>>>24));//直接右移24位 
+		sb.append("."); 
+		sb.append(String.valueOf((addr&0x00FFFFFF)>>>16)); //将高8位置0，然后右移16位 
+		sb.append("."); 
+		sb.append(String.valueOf((addr&0x0000FFFF)>>>8)); 
+		sb.append("."); 
+		sb.append(String.valueOf(addr&0x000000FF)); 
+		return sb.toString(); 
+				
+	}
+	
+	//组建数据单元
+	public ByteBuffer assemData(short msgtype, int inaddr, ByteBuffer content) {
+		
+		int length ;
+		if (content != null)
+			length = content.capacity() + 6 ;
+		else 
+			length = 6;
+		ByteBuffer PDU = ByteBuffer.allocate(length);
+		PDU.putShort(msgtype);
+	
+		PDU.putInt(inaddr);
+		PDU.put(content.array());
+		
+		
+		return PDU;
+	}
+	
+	//发送PDU
+	public void SendPDU(final ByteBuffer pdu, final String ip) {
+		
+		Thread t = new Thread() {
+            public void run() {
+                try {
+                    Socket socket = new Socket(ip, 6666);
+                    
+                    OutputStream outputStream = socket.getOutputStream();
+                    outputStream.write(pdu.array());
+                    //outputStream.write(ss.getBytes());
+                   
+                    outputStream.flush();
+ 
+                    
+                    //socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        t.start();
+		
+	}
+	
+}

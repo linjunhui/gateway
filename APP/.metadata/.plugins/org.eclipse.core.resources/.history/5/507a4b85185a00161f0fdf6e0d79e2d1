@@ -1,0 +1,161 @@
+package com.cqupt.demov1;
+
+
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.zxing.activity.CaptureActivity;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
+
+public class MainActivity extends Activity {
+	
+	String gateID;
+	String gateIp = "181.17.2.222";
+	private ListView deviceslv;
+	List<Device> devicelist = new ArrayList<Device>() ;
+	private TextView gatetv;
+	
+	Handler mHandler = new Handler() {
+		
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			
+			switch (msg.what) {
+			case 0:
+				gatetv.setText("网关：" + gateIp + "已连接" );
+				break;
+			default:
+				break;
+			}
+		}
+	};	
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		//控件
+		deviceslv = (ListView) findViewById(R.id.deviceslv);
+		gatetv = (TextView) findViewById(R.id.gatetv);
+		
+		homeProtocol hp = new homeProtocol(mHandler);
+		int ip = 0xc0a80390;
+		short msgtype = 0x0001;
+		ByteBuffer pdu = hp.assemData(msgtype, ip, null);
+		hp.SendPDU(pdu, "192.168.1.150");
+		
+		
+//		homeProtocol hp = new homeProtocol();
+//		String ip = hp.inAddrtoIP(0xc0a80390);
+//		ByteBuffer hh = ByteBuffer.allocate(4);
+//		int x = 0x22;
+//		hh.putInt(x);
+//		
+//		
+//		
+//		short msgtype = 0x1001;
+//		ByteBuffer bf = hp.assemData(msgtype, 0xc0a80390, hh);
+//		hp.SendPDU(bf, "192.168.1.214");
+//		System.out.println("转换后的ip：" + ip);
+		
+		Device device1 = new Device();
+		
+		device1.name[0] = 'a';
+		device1.name[1] = 'i';
+		device1.name[2] = 'r';
+		device1.name[3] = ' ';
+		device1.name[4] = 'c';
+		device1.name[5] = 'o';
+		device1.name[6] = 'n';
+		device1.name[7] = 'd';
+		device1.ip = 0xc0a80390;
+		
+		String devicename = String.valueOf(device1.name);
+		System.out.println("name:" +  devicename);
+		
+		deviceslv.setAdapter(new DeviceListAdapter(getBaseContext(), devicelist));
+		
+		devicelist.add(device1);
+		devicelist.add(device1);
+		
+		deviceslv.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				System.out.println("选中position:" + position);
+				TextView text = (TextView)view.findViewById(R.id.dntv);
+				String str = (String) text.getText();
+				System.out.println("选中的ssid:" + str);
+				
+
+				
+			}
+			
+		});
+	}
+
+	//扫描网关的ID,在元件清单中要添加扫描界面的Activity
+	public void scanID(View v) {
+		Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
+		
+		startActivityForResult(intent, 0);
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if(resultCode == RESULT_OK) {
+			
+			gateID = data.getExtras().getString("result");
+			System.out.println("ID:" + gateID);
+			connectServer conn = new connectServer();
+			gateIp = conn.connectserver(gateID);
+
+			System.out.println("返回IP:" + gateIp);
+			
+			//得到gate的IP后开始连接gate
+			homeProtocol hp = new homeProtocol();
+			int ip = 0;
+			ByteBuffer bf = null;
+			short msgtype = 0x0001;
+			ByteBuffer pdu = hp.assemData(msgtype, ip, bf);
+			hp.SendPDU(pdu, gateIp);
+		}
+	}
+	
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+}

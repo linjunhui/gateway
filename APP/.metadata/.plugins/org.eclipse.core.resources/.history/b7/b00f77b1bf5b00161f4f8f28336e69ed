@@ -1,0 +1,134 @@
+package com.cqupt.demov1;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.cqupt.demov1.DeviceListAdapter.Component;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+
+public class DeviceActivity extends Activity{
+	
+	ListView attrlv;
+	List<Attr> attrlist = new ArrayList<Attr>() ;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_device);
+		
+		Intent intent = this.getIntent();
+		
+		Device device = (Device)intent.getSerializableExtra("device");
+		
+		setTitle(device.name);
+		
+		int count = 0;
+		for (Attr at : device.attrs) {
+			
+		}
+		
+		if( device.attrs[4]==null)
+		
+				System.out.println("count:" + count);
+//		System.out.println(device.attrs[0].attrName);
+//		attrlv = (ListView)findViewById(R.id.attrlv);
+//		for (int i = 0; i < count; i++) {
+//			attrlist.add(device.attrs[i]);
+//		}
+		//attrlist.add(device.attrs[0]);
+		
+		
+		//attrlv.setAdapter(new AttrAdapter(getBaseContext(), attrlist));
+	}
+
+	
+	public class AttrAdapter extends BaseAdapter {
+
+		
+	
+		private LayoutInflater layoutInflater;
+		private List<Attr> mAttrs; 
+		private Context context; 
+		
+		public AttrAdapter(Context context, List<Attr> mAttrs) {
+			// TODO Auto-generated constructor stub
+			this.context = context;
+			this.layoutInflater = LayoutInflater.from(context);
+			this.mAttrs = mAttrs;
+		}
+		
+		public final class Component {
+			public TextView attrtv;
+			public TextView arrtvbt;
+		}
+		
+		@Override
+		public int getCount() {
+			// TODO Auto-generated method stub
+			return mAttrs.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			// TODO Auto-generated method stub
+			return mAttrs.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			// TODO Auto-generated method stub
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			// TODO Auto-generated method stub
+			Component component = null;
+			
+			if(component == null) {
+				component = new Component();
+				convertView = layoutInflater.inflate(R.layout.attrlist, null);
+				component.attrtv = (TextView) convertView.findViewById(R.id.attrtv);
+				component.arrtvbt = (Button) convertView.findViewById(R.id.attrvbt);
+				
+				convertView.setTag(component);
+			} else {
+				component = (Component) convertView.getTag();
+			}
+			
+			
+			String attrname = mAttrs.get(position).attrName;
+			System.out.println("name1:" +  attrname);
+			component.attrtv .setText(attrname);
+			
+			String attrv = null;
+			
+			if((mAttrs.get(position).attrName).equals("开关")) {
+				if(mAttrs.get(position).data == 0) 
+					attrv = "关";
+				else
+					attrv = "开";
+			}
+			
+												
+			
+			component.arrtvbt.setText(attrv);
+		
+			
+			return convertView;
+		}
+		
+	}
+}

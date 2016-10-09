@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="hiflying_smartlinker_ssid">SSID:</string>
+    <string name="hiflying_smartlinker_password">密碼:</string>
+    <string name="hiflying_smartlinker_start">開始</string>
+    <string name="hiflying_smartlinker_waiting">請稍後&#8230;</string>
+    <string name="hiflying_smartlinker_timeout">配置超時!</string>
+    <string name="hiflying_smartlinker_completed">SmartLink 完成</string>
+    <string name="hiflying_smartlinker_new_module_found" formatted="false">發現新模塊: Mac-%s Ip-%s</string>
+    <string name="hiflying_smartlinker_no_wifi_connectivity">沒有Wifi連接</string>
+</resources>

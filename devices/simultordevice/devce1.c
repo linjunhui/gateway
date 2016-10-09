@@ -49,18 +49,60 @@ typedef struct device_link
 int main(int argc, char const *argv[])
 {	
 	int sockfd;
-	struct sockaddr_in addr;
+	int udpsockfd;
+	struct sockaddr_in addr, c_addr, d_addr;
+	int on = 1, len, c_addr_len, addr_len, err;
 
 	char buf[300];
+//========================UDP广播=============================
+	//创建UDP socket
+	udpsockfd = socket(AF_INET,SOCK_DGRAM,0);
+	printf("创建UDP socket结果%s \n", strerror(errno));
+	//本设备UDP端口
+	memset(&d_addr,0,sizeof(d_addr));
+	d_addr.sin_family = AF_INET;
+	d_addr.sin_addr.s_addr = INADDR_ANY;
+	d_addr.sin_port = htons(7576);	
+	addr_len=sizeof(d_addr);
 
+	//客户端地址
+	memset(&c_addr,0,sizeof(c_addr));
+	c_addr.sin_family = AF_INET;
+	c_addr.sin_addr.s_addr = htonl(INADDR_BROADCAST); 
+	c_addr.sin_port = htons(7575);	
+	c_addr_len=sizeof(c_addr);
+
+	setsockopt(udpsockfd,SOL_SOCKET, SO_BROADCAST,&on,sizeof(on));
+
+	//绑定socket 和 地址
+	err = bind(udpsockfd, (struct sockaddr *)&d_addr, sizeof(d_addr));
+	printf("UDP绑定结果%s\n", strerror(err));
+
+		//发送消息
+	len = sendto(udpsockfd, "buf", 50, 0, (struct sockaddr*)&c_addr, c_addr_len);
+	printf("UDP发送%s \n", strerror(errno));
+	printf("len = %d\n", len);
+	printf("发送消息\n");
+
+	//阻塞在这里接受消息
+	len = recvfrom(udpsockfd, buf, 50, 0, (struct sockaddr*)&c_addr, &c_addr_len);
+	printf("UDP接收%s \n", strerror(errno));
+	//printf("收到消息:%s\n", buf);
+	printf("网关的ip = %s\n", inet_ntoa(c_addr.sin_addr));
+
+
+//====创建socket连接网关=======================
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
-	memset(&addr, 0, sizeof(addr));
-	addr.sin_family = AF_INET;
-	addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-	addr.sin_port = htons(6547);
+	// memset(&addr, 0, sizeof(addr));
+	// addr.sin_family = AF_INET;
+	// addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	// addr.sin_port = htons(6547);
+
+	//设备在接收广播消息时，已经获得了网管ip，现在改变端口port
+	c_addr.sin_port = htons(6547);
 	
-	connect(sockfd, (struct sockaddr *)&addr, sizeof(addr));
+	connect(sockfd, (struct sockaddr *)&c_addr, sizeof(c_addr));
 
 	short msgtype = 0x0002;
 
