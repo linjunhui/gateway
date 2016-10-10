@@ -1,7 +1,6 @@
 package com.example.demov2;
 
-import java.nio.ByteBuffer;
-import java.nio.channels.GatheringByteChannel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +21,11 @@ import android.widget.ListView;
 public class MainActivity extends Activity implements OnRefreshListener {
 	
 	public String gateID;
-	public String gateIp;
+	public String gateIp = "192.168.1.189";
 	SwipeRefreshLayout deviceSw;
 	ListView deviceList; 
 	
-	List<Device> devicelist = new ArrayList<Device>() ;
+	static List<Device> devicelist = new ArrayList<Device>() ;
 	
 	Device device1;
 	
@@ -59,21 +58,19 @@ public class MainActivity extends Activity implements OnRefreshListener {
 		device1 = new Device();
 		
 		
-		device1.ip = "192.168.1.155";
+		device1.ip = SmartProtocol.IPtoInaddr("192.168.3.144");//0x9003a8c0,其中 c0 为192 ,a8 为 168, 03 为 3 , 90 为 144
 		
-		device1.name = "电扇";
+		System.out.println("IP转in_addr测试:" + Integer.toHexString(device1.ip));
+		device1.setName("电扇".getBytes());
 		
-		Attr attr1 = new Attr();
-		attr1.attrName = "开关";
-		attr1.datatype = 0x01;
-		attr1.dataproperty = 0x02;//可读，可写
-		attr1.data = 0x00;
-		attr1.times = 1;
+		device1.attrs[0].setAttrName("开关".getBytes());
+		device1.attrs[0].dataproperty = 0x07;
 		
-		device1.attrs[0] = attr1;
-		device1.attrs[1] = attr1;
 		
-		devicelist.add(device1);
+		//============测试设备对象转byte数组=============
+		byte[] bytes = device1.convertBytes();
+		
+		System.out.println("property:" + bytes[65]);
 		//======设置listView的Adapter
 		deviceList.setAdapter(new DeviceListAdapter(getBaseContext(), devicelist));
 	}
@@ -160,6 +157,8 @@ public class MainActivity extends Activity implements OnRefreshListener {
 		//网关的IP，消息内容 0x0003 请求设备列表
 		//APP消息类型：1.请求设备列表  	2.控制设备
 		//CCC.sendMsg(gateIP, 0x0003, NULL)
+		SmartProtocol.sendMsg((short) 0x0003, gateIp, null);
+		
 		/* 控制设备
 		 * 拿到这个设备对象 或者说  信息，修改其中的属性
 		 * CCC.sendMsg(gateIP, 0x0004, device)

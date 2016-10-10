@@ -1,0 +1,28 @@
+package com.example.demov2;
+
+import java.io.Serializable;
+
+public class Device implements Serializable {
+	int ip;
+	//22 字节 最大7个汉字
+	byte[] name = new byte[22];
+	byte[] id = new byte[9];
+	byte locked;
+	byte[] gateID = new byte[13];
+	byte online;
+	Attr[] attrs = new Attr[20];
+	
+	public void SerializableDevice() { 
+	}	
+
+}
+
+
+ class Attr {
+	byte[] attrName = new byte[13];
+	byte dataproperty;
+	int data;
+	int times;
+}
+ 
+ 

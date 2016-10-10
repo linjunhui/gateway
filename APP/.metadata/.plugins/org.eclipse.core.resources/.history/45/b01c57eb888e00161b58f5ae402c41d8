@@ -1,0 +1,7 @@
+package com.example.demov2;
+
+public class SmartProtocol {
+	public static void sendMsg(short msgtype, String gateIp, Device device) {
+		
+	}
+}

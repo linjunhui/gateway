@@ -26,7 +26,8 @@ public class DeviceListAdapter extends BaseAdapter{
 	
 	public final class Component {
 		public TextView dntv;
-		public TextView iptv;
+		public TextView idtv;
+		public TextView ontv;
 	}
 	
 	@Override
@@ -56,7 +57,8 @@ public class DeviceListAdapter extends BaseAdapter{
 			component = new Component();
 			convertView = layoutInflater.inflate(R.layout.deviceslist, null);
 			component.dntv = (TextView) convertView.findViewById(R.id.dntv);
-			component.iptv = (TextView) convertView.findViewById(R.id.iptv);
+			component.idtv = (TextView) convertView.findViewById(R.id.idtv);
+			component.ontv = (TextView) convertView.findViewById(R.id.ontv);
 			
 			convertView.setTag(component);
 		} else {
@@ -64,14 +66,22 @@ public class DeviceListAdapter extends BaseAdapter{
 		}
 		
 		
-		String devicename = String.valueOf(mDevices.get(position).name);
+		//String devicename = String.valueOf(mDevices.get(position).name);
+		String devicename = new String(mDevices.get(position).name);
 		System.out.println("name1:" +  devicename);
 		component.dntv.setText(devicename);
 		
 		
-		String ip = mDevices.get(position).ip;
-		
-		component.iptv.setText(ip);
+		//String ip = mDevices.get(position).ip;
+		//String ip = SmartProtocol.inAddrtoIP(mDevices.get(position).ip);
+		String id = new String(mDevices.get(position).id);
+		component.idtv.setText(id);
+		String online = null ;
+		if(mDevices.get(position).online == 110)
+			online = "¿Îœﬂ";
+		if(mDevices.get(position).online == 121)
+			online = "‘⁄œﬂ";
+		component.ontv.setText(online);
 	
 		
 		return convertView;

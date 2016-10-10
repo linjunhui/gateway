@@ -43,9 +43,12 @@ void thread1(int connfd) {
 		list_add(device_link, pnode);
 
 
-	} else if (msgtype == 0x0004) {
+	} else if (msgtype == 0x0003) {
 		//处理来自APP的消息 
-		
+		printf("收到来APP请求设备列表的消息\n");
+		//send(connfd, "我是网关, 收到请求\n", 200, 0);
+		traverse_to_app(device_link, connfd);
+		//======遍历链表回复给APP========
 	}
 
 

@@ -68,10 +68,16 @@ int main(int argc, char const *argv[])
 	memcpy(dc->device_id, "123457", 7);
 	memcpy(dc->name, "美的空调", 13);
 
-	memcpy(buf, &msgtype, 2);
-	memcpy(buf+2, dc, 284);
+	memcpy(dc->attrs[0].attr_name, "开关", 7);
+	dc->attrs[0].property = 0x07;
 
-	send(sockfd, buf, 286, 0);
+
+	memcpy(buf, &msgtype, 2);
+	memcpy(buf+2, dc, 274);
+printf("property %d\n", buf[65]);
+printf("属性名 %s\n", buf+52);
+
+	send(sockfd, buf, 276, 0);
 
 	close(sockfd);
 	return 0;

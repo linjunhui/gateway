@@ -1,0 +1,38 @@
+package com.example.demov2;
+
+import java.io.Serializable;
+
+public class Device implements Serializable {
+	int ip;
+	//22 字节 最大7个汉字
+	byte[] name = new byte[22];
+	byte[] id = new byte[9];
+	byte locked;
+	byte[] gateID = new byte[13];
+	byte online;
+	// 22 * 10 = 220 字节 ，当然这个数值并没有220 字节，数值存的是引用
+	Attr[] attrs = new Attr[10];
+	//填充用
+	byte[] next = new byte[4];
+	public byte[] convertBytes() {
+		byte[] bytes = new byte[300];
+		
+		return gateID;
+		
+	}
+
+}
+
+// 22 字节
+ class Attr implements Serializable {
+	//13字节
+	byte[] attrName = new byte[13];
+	//1 字节
+	byte dataproperty;
+	//4 字节
+	int data;
+	//4 字节
+	int times;
+}
+ 
+ 

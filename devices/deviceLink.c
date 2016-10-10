@@ -116,3 +116,19 @@ void traverse_list_off(pdevice_link phead) {
 
 	printf("设置离线完成\n");
 }
+
+//遍历链表回复给APP
+void traverse_to_app(pdevice_link phead, int connfd) {
+	char buf[277];
+	pdevice_node p = phead->pNext;
+
+	while(NULL != p) {
+		memcpy(buf+2, p, 274);
+		buf[276] = '\n';
+		printf("遍历-名字:%s\n", p->name);
+		send(connfd, buf, 277, 0);
+		p = p->pNext;
+	}
+	send(connfd, "", 0, 0);
+	printf("遍历到app\n");
+}

@@ -52,8 +52,11 @@ void list_add(pdevice_link phead, pdevice_node node);
 
 //遍历链表，打印节点信息
 void traverse_list(pdevice_link phead);
-//所有随便设置为 离线状态
-void traverse_list_off(pdevice_link phead); 
+//所有设备设置为 离线状态
+void traverse_list_off(pdevice_link phead);
+
+//遍历链表回复给APP
+void traverse_to_app(pdevice_link phead, int connfd);  
 #endif
 
 

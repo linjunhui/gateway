@@ -13,6 +13,7 @@
         android:gravity="center"
         />
     <TextView 
+        android:id="@+id/ontv"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_weight="3"
@@ -21,7 +22,7 @@
         />
     
     <TextView
-        android:id="@+id/iptv"
+        android:id="@+id/idtv"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_weight="2"

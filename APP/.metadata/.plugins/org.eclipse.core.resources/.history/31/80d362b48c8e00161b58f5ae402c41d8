@@ -1,0 +1,34 @@
+package com.example.demov2;
+
+public class SmartProtocol {
+	public static void sendMsg(short msgtype, String gateIp, Device device) {
+		if(msgtype == 0x0004) {
+			 //将对象转化为byte 数组
+		}
+	}
+	
+	
+	//in_addr 转ip字符串
+	public static String inAddrtoIP(int addr) {
+		
+		StringBuffer sb=new StringBuffer(""); 
+		sb.append(String.valueOf(addr>>>24));//直接右移24位 
+		sb.append("."); 
+		sb.append(String.valueOf((addr&0x00FFFFFF)>>>16)); //将高8位置0，然后右移16位 
+		sb.append("."); 
+		sb.append(String.valueOf((addr&0x0000FFFF)>>>8)); 
+		sb.append("."); 
+		sb.append(String.valueOf(addr&0x000000FF)); 
+		return sb.toString(); 
+				
+	}
+	
+	public static int IPtoInaddr(String ip) {
+		int in_addr;
+		String[] as = ip.split(".");
+		
+		in_addr = Integer.parseInt(as[0])<<24 | Integer.parseInt(as[1])<<16 | Integer.parseInt(as[2])<<8 | Integer.parseInt(as[3]);
+		
+		return 0;	
+	}
+}

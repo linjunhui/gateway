@@ -1,0 +1,88 @@
+package com.example.demov2;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.List;
+
+public class SmartProtocol {
+	public static void sendMsg(final short msgtype, final String gateIp, Device device) {
+		if(msgtype == 0x0004) {
+			 //将对象转化为byte 数组
+		} else if(msgtype == 0x0003) {
+			//拿到MainActivity中的devicelist
+			//List devicelist = MainActivity.devicelist;
+			
+			
+			//===网络这种耗时操作放在子线程中做
+			Thread t = new Thread() {
+	            public void run() {
+	                try {
+	                    Socket socket = new Socket(gateIp, 6547);
+	                    //char[] buffer = new char[200];
+	                    
+	                    ByteBuffer bf = ByteBuffer.allocate(2);
+	                    bf.putShort(msgtype);
+	                    bf.order(ByteOrder.LITTLE_ENDIAN);
+	                    
+	                    byte[] buff = bf.array();
+	                    //msgtype 在buff中的存储顺序
+	                    System.out.println("buf0 = " + buff[0] + "buff1 = " + buff[1]);
+	                    System.out.println("msgtype的低位" + (msgtype&0x00ff));
+	                    System.out.println("建立socket");
+	                    
+	                    OutputStream outputStream = socket.getOutputStream();
+	    				outputStream.write(buff);				
+	    	            //outputStream.write(ss.getBytes());
+	    		           
+	    	            outputStream.flush();
+	    	            socket.close();
+	    			} catch (IOException e) {
+	    				// TODO Auto-generated catch block
+	    				e.printStackTrace();
+	    			}
+	            }
+			};
+			
+			t.start();
+			
+		}
+	}
+	
+	
+	//in_addr 转ip字符串
+	public static String inAddrtoIP(int addr) {
+		
+		StringBuffer sb=new StringBuffer(""); 
+		sb.append(String.valueOf(addr&0x000000FF)); 
+		
+		//sb.append(String.valueOf(addr>>>24));//直接右移24位 
+		sb.append("."); 
+		sb.append(String.valueOf((addr&0x0000FFFF)>>>8)); 
+		
+		//sb.append(String.valueOf((addr&0x00FFFFFF)>>>16)); //将高8位置0，然后右移16位 
+		sb.append("."); 
+		sb.append(String.valueOf((addr&0x00FFFFFF)>>>16));
+		
+		//sb.append(String.valueOf((addr&0x0000FFFF)>>>8)); 
+		sb.append("."); 
+		sb.append(String.valueOf(addr>>>24));//直接右移24位 
+		
+		//sb.append(String.valueOf(addr&0x000000FF)); 
+		return sb.toString(); 
+				
+	}
+	
+	public static int IPtoInaddr(String ip) {
+		int in_addr;
+		//使用 \\. 而不是 .
+		String[] as = ip.split("\\.");
+		System.out.println("数组长度:" + as.length);
+		
+		in_addr = Integer.parseInt(as[3])<<24 | Integer.parseInt(as[2])<<16 | Integer.parseInt(as[1])<<8 | Integer.parseInt(as[0]);
+		
+		return in_addr;	
+	}
+}
