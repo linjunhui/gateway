@@ -16,7 +16,7 @@ public class SmartProtocol {
 			 //将对象转化为byte 数组
 		} else if(msgtype == 0x0003) {
 			//拿到MainActivity中的devicelist
-			final List devicelist = MainActivity.devicelist;
+			final List<Device> devicelist = MainActivity.devicelist;
 			
 			
 			//===网络这种耗时操作放在子线程中做
@@ -45,22 +45,31 @@ public class SmartProtocol {
 	    	            
 	    	            BufferedInputStream br = new BufferedInputStream(socket.getInputStream());
 	    	            
+
 	    	            byte[] bytes = new byte[277];
-	    	            br.read(bytes);
-	    	            	    	            
-	    	            String s = new String(bytes, 6, 22);
-	    	            System.out.println("收到回复：" + s);
-	    	            //创建一个设备对象
-	    	            Device device = new Device();
-	    	            device.fillName(bytes);
-	    	            device.fillId(bytes);
-	    	            device.fillOnline(bytes);
-	    	            
-	    	            System.out.println("设备的名称：" + new String(device.name));
-	    	            System.out.println("设备的ID：" + new String(device.id));
-	    	            System.out.println("是否在线：" + device.online);//110 n  121 y  
-	    	            
-	    	            devicelist.add(device);
+	    	          
+	    	           //int i;
+	    	          while(br.read(bytes) > 0) {
+	    	        	  	
+	    	        	    //int i =  br.read(bytes);
+		    	            //System.out.println("读取到字节数：" + i);	    	            
+		    	            String s = new String(bytes, 6, 22);
+		    	            System.out.println("收到回复：" + s);
+		    	            //创建一个设备对象
+		    	            Device device = new Device();
+		    	            device.fillName(bytes);
+		    	            device.fillId(bytes);
+		    	            device.fillOnline(bytes);
+		    	            
+		    	            System.out.println("设备的名称：" + new String(device.name));
+		    	            System.out.println("设备的ID：" + new String(device.id));
+		    	            System.out.println("是否在线：" + device.online);//110 n  121 y  
+		    	            
+		    	            devicelist.add(device);
+		    	    
+	    	         }
+	    	         //  System.out.println("读取到字节数：" + i);
+	    	           System.out.println("设备列表更新完成");
 	    	            socket.close();
 	    			} catch (IOException e) {
 	    				// TODO Auto-generated catch block

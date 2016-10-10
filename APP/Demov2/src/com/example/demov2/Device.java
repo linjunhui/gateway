@@ -1,9 +1,10 @@
 package com.example.demov2;
 
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class Device {
+public class Device implements Serializable {
 	//4 字节
 	int ip;
 	//22 字节 最大7个汉字
@@ -93,10 +94,13 @@ public class Device {
 		
 	}
 
+	public void SerializableDevice() { 
+	}	
+
 }
 
 // 22 字节
- class Attr {
+ class Attr implements Serializable {
 	//13字节
 	byte[] attrName = new byte[13];
 	//1 字节
@@ -125,6 +129,10 @@ public class Device {
 		return bytes;
 		
 	}
+	
+	public void SerializableDevice() { 
+	}	
+
 }
  
  

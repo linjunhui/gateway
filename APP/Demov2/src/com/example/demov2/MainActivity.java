@@ -16,12 +16,15 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class MainActivity extends Activity implements OnRefreshListener {
 	
 	public String gateID;
-	public String gateIp = "192.168.1.189";
+	public String gateIp = "192.168.1.190";
 	SwipeRefreshLayout deviceSw;
 	ListView deviceList; 
 	
@@ -36,7 +39,6 @@ public class MainActivity extends Activity implements OnRefreshListener {
             {  
             case 1:  
             	System.out.println("准备更新list");
-            	devicelist.add(device1);
             	deviceList.setAdapter(new DeviceListAdapter(getBaseContext(), devicelist));
                 break;  
   
@@ -73,6 +75,35 @@ public class MainActivity extends Activity implements OnRefreshListener {
 		System.out.println("property:" + bytes[65]);
 		//======设置listView的Adapter
 		deviceList.setAdapter(new DeviceListAdapter(getBaseContext(), devicelist));
+		
+		
+		deviceList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				System.out.println("选中position:" + position);
+				TextView text = (TextView)view.findViewById(R.id.dntv);
+				String str = (String) text.getText();
+				System.out.println("选中的ssid:" + str);
+				//跳转到下device界面
+				
+				Intent intent = new Intent();
+				//Bundle bundle = new Bundle();
+			
+				//bundle.putSerializable("device", pos);
+				
+				//intent.putExtras(bundle);
+				intent.putExtra("position", position);
+				intent.setClass(getBaseContext(), DeviceActivity.class);
+				
+				startActivity(intent);
+				
+
+				
+			}
+			
+		});
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -145,9 +176,17 @@ public class MainActivity extends Activity implements OnRefreshListener {
 	public void onRefresh() {
 		// TODO Auto-generated method stub
 		System.out.println("下拉了！！！！！");
+		 devicelist.clear();
 		//停止刷新
 		deviceSw.setRefreshing(false);
 		//下拉时 向网关发消息请求设备列表
+		SmartProtocol.sendMsg((short) 0x0003, gateIp, null);
+		try {
+			Thread.sleep(5);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		Message swMsg = new Message();
 		swMsg.what = 1;
@@ -157,7 +196,7 @@ public class MainActivity extends Activity implements OnRefreshListener {
 		//网关的IP，消息内容 0x0003 请求设备列表
 		//APP消息类型：1.请求设备列表  	2.控制设备
 		//CCC.sendMsg(gateIP, 0x0003, NULL)
-		SmartProtocol.sendMsg((short) 0x0003, gateIp, null);
+
 		
 		/* 控制设备
 		 * 拿到这个设备对象 或者说  信息，修改其中的属性

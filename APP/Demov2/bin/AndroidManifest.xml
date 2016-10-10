@@ -31,13 +31,20 @@
             android:name="com.example.demov2.AddDeviceActivity"
             android:configChanges="mcc|mnc|locale|keyboard|keyboardHidden|navigation|orientation|screenSize|fontScale"
             android:screenOrientation="portrait"
-            android:label="添加设备"/>       
+            android:label="添加设备">
+         </activity>       
         <activity
             android:configChanges="orientation|keyboardHidden"
             android:name="com.zxing.activity.CaptureActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateAlwaysHidden" >
+        </activity>
+        <activity 
+            android:name="com.example.demov2.DeviceActivity"
+            android:screenOrientation="portrait"
+            android:label="设备"
+            >      
         </activity>
     </application>
 

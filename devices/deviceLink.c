@@ -2,6 +2,7 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/socket.h>
 #include "devicelink.h"
 
 //创建设备链表
@@ -128,7 +129,9 @@ void traverse_to_app(pdevice_link phead, int connfd) {
 		printf("遍历-名字:%s\n", p->name);
 		send(connfd, buf, 277, 0);
 		p = p->pNext;
+		
 	}
-	send(connfd, "", 0, 0);
+
+	shutdown(connfd, SHUT_RDWR);
 	printf("遍历到app\n");
 }
