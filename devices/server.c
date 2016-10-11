@@ -9,6 +9,8 @@
 //声明一个device_link指向 设备链表
 pdevice_link device_link;
 
+void send_broadcast(char buf[]) ;
+
 void thread1(int connfd) {
 	char buf[300];
 	int buflen;
@@ -49,6 +51,18 @@ void thread1(int connfd) {
 		//send(connfd, "我是网关, 收到请求\n", 200, 0);
 		traverse_to_app(device_link, connfd);
 		//======遍历链表回复给APP========
+	} else if(msgtype == 0x0005) {
+		//网关好像不用做什么处理直接转发到设备就行
+		printf("收到了APP对设备的控制消息\n");
+
+		printf("参数的值data = %d\n", buf[69]);
+		printf("值得倍数times = %d\n", buf[73]);
+
+		//关闭原连接
+		close(connfd);
+
+		//通过广播发送控制到设备
+		send_broadcast(buf);
 	}
 
 
@@ -64,6 +78,44 @@ void list_thread(pdevice_link device_link) {
 
 }
 
+void send_broadcast(char buf[]) {
+		//创建一个发送的socket
+	int sockfd;
+	struct sockaddr_in addr, c_addr;
+	socklen_t addr_len, c_addr_len;
+	int len, err;
+	const int on = 1;
+
+
+		//创建UDP socket
+	sockfd = socket(AF_INET,SOCK_DGRAM,0);
+	printf("创建UDP socket结果%s \n", strerror(errno));
+
+	memset(&addr,0,sizeof(addr));
+	addr.sin_family = AF_INET;
+	addr.sin_addr.s_addr = INADDR_ANY;
+	addr.sin_port = htons(7575);	
+	addr_len=sizeof(addr);
+
+	//客户端地址
+	memset(&c_addr,0,sizeof(c_addr));
+	c_addr.sin_family = AF_INET;
+	c_addr.sin_addr.s_addr = htonl(INADDR_BROADCAST); 
+	c_addr.sin_port = htons(7576);	
+	c_addr_len=sizeof(c_addr);
+
+	setsockopt(sockfd,SOL_SOCKET, SO_BROADCAST,&on,sizeof(on));
+
+	//绑定socket 和 地址
+	err = bind(sockfd, (struct sockaddr *)&addr, sizeof(addr));
+	printf("UDP绑定结果%s\n", strerror(err));
+
+	//发送消息
+	len = sendto(sockfd, buf, 300, 0, (struct sockaddr*)&c_addr, c_addr_len);
+	printf("UDP发送%s \n", strerror(errno));
+	printf("len = %d\n", len);
+	printf("发送消息\n");
+}
 
 void adver_gateip(void) {
 	//创建一个发送的socket

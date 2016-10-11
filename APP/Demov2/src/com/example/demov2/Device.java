@@ -23,7 +23,7 @@ public class Device implements Serializable {
 	byte[] next = new byte[4];
 	
 	
-	ByteBuffer buffer=ByteBuffer.allocate(300);
+	ByteBuffer buffer= null;
 	byte[] bytes = null;
 	
 	public Device() {
@@ -60,11 +60,12 @@ public class Device implements Serializable {
 	
 	public byte[] convertBytes() {
 		
-		buffer.clear();
+		
 		//两个字节
 		short msgtype = 0;
 		
 		buffer=ByteBuffer.allocate(300);
+		buffer.clear();
 		 //先设置大端还是小端 再put
 		buffer.order(ByteOrder.LITTLE_ENDIAN);
 		
@@ -112,15 +113,18 @@ public class Device implements Serializable {
 	
 	ByteBuffer buffer=ByteBuffer.allocate(22);
 	byte[] bytes = null;
-	
 
 	public void setAttrName(byte[] b) {
 		System.arraycopy(b, 0, this.attrName, 0, b.length);
 	}
 
+	public void fillAttrName(byte[] b) {
+		System.arraycopy(b, 52, this.attrName, 0, 13);
+	}
 
 	public byte[] attrConvertBytes() {		
 		
+		buffer.clear();
 		buffer.put(attrName);
 		buffer.put(dataproperty);
 		buffer.putInt(data);

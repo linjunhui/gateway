@@ -24,7 +24,7 @@ import android.widget.AdapterView.OnItemClickListener;
 public class MainActivity extends Activity implements OnRefreshListener {
 	
 	public String gateID;
-	public String gateIp = "192.168.1.190";
+	static public String gateIp = "192.168.1.189";
 	SwipeRefreshLayout deviceSw;
 	ListView deviceList; 
 	
@@ -178,11 +178,11 @@ public class MainActivity extends Activity implements OnRefreshListener {
 		System.out.println("下拉了！！！！！");
 		 devicelist.clear();
 		//停止刷新
-		deviceSw.setRefreshing(false);
+
 		//下拉时 向网关发消息请求设备列表
 		SmartProtocol.sendMsg((short) 0x0003, gateIp, null);
 		try {
-			Thread.sleep(5);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -193,6 +193,7 @@ public class MainActivity extends Activity implements OnRefreshListener {
 		
 		mHandler.sendMessage(swMsg);
 		
+		deviceSw.setRefreshing(false);
 		//网关的IP，消息内容 0x0003 请求设备列表
 		//APP消息类型：1.请求设备列表  	2.控制设备
 		//CCC.sendMsg(gateIP, 0x0003, NULL)

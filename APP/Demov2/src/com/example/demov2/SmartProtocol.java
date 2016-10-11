@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.List;
@@ -61,9 +62,12 @@ public class SmartProtocol {
 		    	            device.fillId(bytes);
 		    	            device.fillOnline(bytes);
 		    	            
+		    	            device.attrs[0].fillAttrName(bytes);
+		    	            
 		    	            System.out.println("设备的名称：" + new String(device.name));
 		    	            System.out.println("设备的ID：" + new String(device.id));
 		    	            System.out.println("是否在线：" + device.online);//110 n  121 y  
+		    	            System.out.println("参数名：" + new String(device.attrs[0].attrName));
 		    	            
 		    	            devicelist.add(device);
 		    	    
@@ -80,6 +84,30 @@ public class SmartProtocol {
 			
 			t.start();
 			
+		} else if(msgtype == 0x0005) {
+
+			final byte[] bytes = device.convertBytes();
+			bytes[0] = 0x05;
+			bytes[1] = 0x00;
+			
+			Thread t = new Thread() {
+	            public void run() {
+	                try {
+	                    Socket socket = new Socket(gateIp, 6547);
+	
+	                    OutputStream outputStream = socket.getOutputStream();
+	    				outputStream.write(bytes);				   		           
+	    	            outputStream.flush();
+	    	            
+	    	            System.out.println("控制发送完成");
+	    	            socket.close();
+	    			} catch (IOException e) {
+	    				// TODO Auto-generated catch block
+	    				e.printStackTrace();
+	    			}
+	            }
+			};
+			t.start();
 		}
 	}
 	

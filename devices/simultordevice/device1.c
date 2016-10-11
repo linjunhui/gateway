@@ -110,6 +110,10 @@ int main(int argc, char const *argv[])
 	memcpy(dc->device_id, "123456", 7);
 	memcpy(dc->name, "格力空调", 13);
 
+	memcpy(dc->attrs[0].attr_name, "开关", 7);
+	dc->attrs[0].property = 0x07;
+
+
 	memcpy(buf, &msgtype, 2);
 	memcpy(buf+2, dc, 284);
 
@@ -119,5 +123,16 @@ int main(int argc, char const *argv[])
 	send(sockfd, buf, 286, 0);
 
 	close(sockfd);
+
+	//继续使用之前创建的UDP的socket接收网关的控制消息
+	while(1) {
+			//阻塞在这里接受消息
+		len = recvfrom(udpsockfd, buf, 300, 0, (struct sockaddr*)&c_addr, &c_addr_len);
+		printf("UDP接收%s \n", strerror(errno));
+		printf("收到控制消息长度%d\n", len);
+		printf("收到控制消息data = %d, times = %d\n", buf[69], buf[73]);
+		printf("网关的ip = %s\n", inet_ntoa(c_addr.sin_addr));
+	}
+
 	return 0;
 }
