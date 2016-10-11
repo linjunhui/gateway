@@ -115,12 +115,12 @@ int main(int argc, char const *argv[])
 
 
 	memcpy(buf, &msgtype, 2);
-	memcpy(buf+2, dc, 284);
+	memcpy(buf+2, dc, 274);
 
 	printf("property %d\n", buf[65]);
 	printf("属性名 %s\n", buf+52);
 
-	send(sockfd, buf, 286, 0);
+	send(sockfd, buf, 276, 0);
 
 	close(sockfd);
 
@@ -132,6 +132,21 @@ int main(int argc, char const *argv[])
 		printf("收到控制消息长度%d\n", len);
 		printf("收到控制消息data = %d, times = %d\n", buf[69], buf[73]);
 		printf("网关的ip = %s\n", inet_ntoa(c_addr.sin_addr));
+
+	//====创建socket连接网关=======================
+		// sockfd = socket(AF_INET, SOCK_STREAM, 0);	
+		// printf("创建socket结果%s\n", strerror(errno));		
+
+		// connect(sockfd, (struct sockaddr *)&c_addr, sizeof(c_addr));
+		// printf("连接结果%s\n", strerror(errno));
+		// short msgtype = 0x0002;
+		// memcpy(buf, &msgtype, 2);
+
+		// printf("property %d\n", buf[65]);
+		// printf("属性名 %s\n", buf+52);
+
+		// send(sockfd, buf, 276, 0);
+		// close(sockfd);
 	}
 
 	return 0;

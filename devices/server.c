@@ -43,6 +43,7 @@ void thread1(int connfd) {
 		remove_from_list(device_link, pnode->device_id);
 
 		list_add(device_link, pnode);
+		close(connfd);
 
 
 	} else if (msgtype == 0x0003) {
@@ -51,6 +52,8 @@ void thread1(int connfd) {
 		//send(connfd, "我是网关, 收到请求\n", 200, 0);
 		traverse_to_app(device_link, connfd);
 		//======遍历链表回复给APP========
+
+		close(connfd);
 	} else if(msgtype == 0x0005) {
 		//网关好像不用做什么处理直接转发到设备就行
 		printf("收到了APP对设备的控制消息\n");
