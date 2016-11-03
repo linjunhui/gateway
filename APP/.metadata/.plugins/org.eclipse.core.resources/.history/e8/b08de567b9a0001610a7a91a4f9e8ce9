@@ -1,0 +1,72 @@
+package com.example.demov2;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.ConnectException;
+import java.net.Socket;
+
+public class ConnectServer {
+	
+		public static String gateID;
+		public static String gateIp;
+		public static String connectserver(final String gateId) {
+	
+		gateID = gateId;
+		
+		 Thread t = new Thread() {
+	            public void run() {
+	                try {
+	                    Socket socket = new Socket("119.29.34.51", 6666);
+
+	                   // rSocket = new WeakReference<Socket>(socket);
+
+	                    System.out.println("1111");
+	                    OutputStream outputStream = socket.getOutputStream();
+	                    outputStream.write(("M" + gateID).getBytes());
+	                    System.out.println("M" + gateID);
+	                    outputStream.flush();
+	                   // recMsg();
+	                    socket.shutdownOutput();
+	                    System.out.println("222");
+	                    BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	                    System.out.println("3333");
+	                    String line = null;
+	                    while ((line = br.readLine()) != null) {
+	                        System.out.println("line:" + line);
+	                        if (line.length()>6 && line.length() < 16) {
+	                            gateIp = line;
+	                            System.out.println("ip2:" + gateIp);	                        
+	                        } else  {
+	                            System.out.println("这不是一个ip地址");
+	                        }
+	                    }
+	                    
+	                    socket.close();
+	                } catch(ConnectException e){
+	                	System.out.println("无法连接到服务器");
+	                }
+	                catch (IOException e) {
+	                    e.printStackTrace();
+	                }
+	            }
+	            
+	        };
+	        t.start();
+        
+	        while(gateIp == null){
+	        	try {
+					Thread.sleep(2);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        }
+	        System.out.println("准备返回IP:" + gateIp);
+            return gateIp ;
+	        	
+	}
+		
+
+}

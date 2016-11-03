@@ -121,7 +121,15 @@ public class Device implements Serializable {
 	public void fillAttrName(byte[] b) {
 		System.arraycopy(b, 52, this.attrName, 0, 13);
 	}
-
+	public void fillAttrData(byte[] b) {
+		int data;
+		//data = b[69]|(b[69]<<8)|(b[67]<<16)|(b[66]<<24);
+		if(b[66] == 2)
+			data = 2;
+		else data =1;
+		
+		this.data = data;
+	}
 	public byte[] attrConvertBytes() {		
 		
 		buffer.clear();

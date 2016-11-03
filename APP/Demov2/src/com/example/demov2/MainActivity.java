@@ -1,6 +1,12 @@
 package com.example.demov2;
 
 
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +25,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class MainActivity extends Activity implements OnRefreshListener {
@@ -27,6 +34,7 @@ public class MainActivity extends Activity implements OnRefreshListener {
 	static public String gateIp = "192.168.1.189";
 	SwipeRefreshLayout deviceSw;
 	ListView deviceList; 
+	TextView gatetv;
 	
 	static List<Device> devicelist = new ArrayList<Device>() ;
 	
@@ -36,12 +44,18 @@ public class MainActivity extends Activity implements OnRefreshListener {
         public void handleMessage(android.os.Message msg)  
         {  
             switch (msg.what)  
-            {  
+            {
+            //更新list
             case 1:  
             	System.out.println("准备更新list");
             	deviceList.setAdapter(new DeviceListAdapter(getBaseContext(), devicelist));
-                break;  
-  
+                break;
+            case 2:
+            	gatetv.setText("网关:" + gateIp + " 已连接");
+            	break;
+            case 3:
+            	gatetv.setText("网关:" + gateIp + " 未接入");
+            	break;
             }  
         }; 
 	};
@@ -53,6 +67,8 @@ public class MainActivity extends Activity implements OnRefreshListener {
 		
 		deviceSw = (SwipeRefreshLayout) findViewById(R.id.device_sw);
 		deviceList = (ListView) findViewById(R.id.device_list);
+		
+		gatetv = (TextView) findViewById(R.id.gatetv);
 		
 		deviceSw.setOnRefreshListener(this);
 		
@@ -145,10 +161,41 @@ public class MainActivity extends Activity implements OnRefreshListener {
 			System.out.println("ID:" + gateID);
 			//connectServer conn = new connectServer();
 			//gateIp = conn.connectserver(gateID);
-			
 			gateIp = ConnectServer.connectserver(gateID);
 
 			System.out.println("返回IP:" + gateIp);
+			
+			Thread t = new Thread() {
+				public void run() {	
+					Message msg = new Message();
+					try {
+						
+						Socket socket = new Socket();
+						
+						socket.connect(new InetSocketAddress(gateIp, 6547), 1000);	
+						
+						
+						socket.close();
+						msg.what = 2;
+					} catch(SocketTimeoutException 	e){ 
+						System.out.println("网关不在线");
+						msg.what = 3;
+						e.printStackTrace();
+					} catch(ConnectException e) {
+						System.out.println("网关不在线");
+						msg.what = 3;
+						//Toast.makeText(getBaseContext(), "网关不存在", Toast.LENGTH_LONG);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					mHandler.sendMessage(msg);
+				}
+			};
+			
+			t.start();
+			
 			
 			//得到gate的IP后开始连接gate
 //			homeProtocol hp = new homeProtocol();

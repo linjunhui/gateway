@@ -56,6 +56,8 @@ public class SmartProtocol {
 		    	            //System.out.println("读取到字节数：" + i);	    	            
 		    	            String s = new String(bytes, 6, 22);
 		    	            System.out.println("收到回复：" + s);
+		    	            
+		    	            System.out.println("收到回复bf[69]：" + bytes[69]);
 		    	            //创建一个设备对象
 		    	            Device device = new Device();
 		    	            device.fillName(bytes);
@@ -63,12 +65,13 @@ public class SmartProtocol {
 		    	            device.fillOnline(bytes);
 		    	            
 		    	            device.attrs[0].fillAttrName(bytes);
+		    	            device.attrs[0].fillAttrData(bytes);
 		    	            
 		    	            System.out.println("设备的名称：" + new String(device.name));
 		    	            System.out.println("设备的ID：" + new String(device.id));
 		    	            System.out.println("是否在线：" + device.online);//110 n  121 y  
 		    	            System.out.println("参数名：" + new String(device.attrs[0].attrName));
-		    	            
+		    	            System.out.println("参数值：" + device.attrs[0].data);
 		    	            devicelist.add(device);
 		    	    
 	    	         }

@@ -160,9 +160,9 @@ public class DeviceActivity extends Activity{
 			String attrv = null;
 			
 			if((attrname.substring(0, 2)).equals("开关")) {
-				if(mAttrs.get(position).data == 0) 
+				if(mAttrs.get(position).data == 2) 
 					attrv = "关";
-				else
+				else if(mAttrs.get(position).data == 1)
 					attrv = "开";
 				
 			System.out.println("开关状态:" + attrv);
@@ -187,10 +187,10 @@ public class DeviceActivity extends Activity{
 					//改变当前状态显示
 					if(attrname.substring(0, 2).equals("开关")) {
 						System.out.println("状态改变:" + pos);
-						if(devicelist.get(deviceposition).attrs[pos].data == 0 ){
+						if(devicelist.get(deviceposition).attrs[pos].data == 2 ){
 							devicelist.get(deviceposition).attrs[pos].data = 1;
 						} else {
-							devicelist.get(deviceposition).attrs[pos].data = 0;
+							devicelist.get(deviceposition).attrs[pos].data = 2;
 						}
 						System.out.println("状态改变:");
 						System.out.println("开关状态:");
