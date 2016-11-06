@@ -1,0 +1,18 @@
+C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/CortexM0/ARM_GCC_493/Debug/UART_SCB_IRQ.o : C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/Generated_Source/PSoC4/CyLib.h C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/Generated_Source/PSoC4/UART_SCB_IRQ.c C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/Generated_Source/PSoC4/UART_SCB_IRQ.h C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/Generated_Source/PSoC4/cytypes.h C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/cyapicallbacks.h 
+
+C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/Generated_Source/PSoC4/CyLFClk.h : 
+
+C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/Generated_Source/PSoC4/CyLib.h : 
+
+C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/Generated_Source/PSoC4/UART_SCB_IRQ.c : 
+
+C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/Generated_Source/PSoC4/UART_SCB_IRQ.h : 
+
+C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/Generated_Source/PSoC4/cydevice_trm.h : 
+
+C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/Generated_Source/PSoC4/cyfitter.h : 
+
+C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/Generated_Source/PSoC4/cytypes.h : 
+
+C:/Users/Administrator/Documents/PSoC\ Creator/DEVICE01/Design01.cydsn/cyapicallbacks.h : 
+
