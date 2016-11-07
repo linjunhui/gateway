@@ -49,6 +49,8 @@ void recv_app_msg(int connfd) {
 		printf("APP控制消息分割线==========================\n");
 
 		printf("控制参数的值data = %d~~~~~~~~~~~~\n", buf[69]);
+		if(buf[69] == 2)
+			buf[66]=buf[67]=buf[68] = 2;
 		printf("值得倍数times = %d\n", buf[73]);
 
 		//关闭原连接
@@ -59,7 +61,7 @@ void recv_app_msg(int connfd) {
 
 		int i;
 		usleep(500000);
-		for(i = 0;i<10;i++) {
+		for(i = 0;i<20;i++) {
 			usleep(100000);
 			len = sendto(bsockfd, buf, 300, 0, (struct sockaddr*)&c_addr, c_addr_len);	;	
 		}

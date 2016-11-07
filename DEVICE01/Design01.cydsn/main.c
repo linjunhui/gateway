@@ -66,6 +66,7 @@ device dc;
 //写一个函数来put字符数组 发送n字节的数组
 void put_char_array(int16 size, char8 arr[]) {
     int i;
+    UART_SpiUartClearTxBuffer();
     for(i=0;i<size;i++) 
         UART_UartPutChar(arr[i]);
 }
@@ -73,14 +74,15 @@ void sendInfo(void) {
     memcpy(tbuf, &msgtype, 2); 
     memcpy(tbuf+2, &dc, 274);
     
-    UART_SpiUartClearTxBuffer();
-    CyDelay(100);
+    
+//    CyDelay(100);
     put_char_array(300, tbuf);
 }
 void read_nchar(uint16 length, char8 buf[]) {
     uint32 ch;
     uint16  i;
-    UART_SpiUartClearRxBuffer();
+    //UART_SpiUartClearRxBuffer();
+    //这里千万不要清除 rxbuffer，会清除掉读入的第一位，导致错位
     //UART_SpiUartClearTxBuffer();
     for (i = 0;i<length;i++) {     
         //while((ch = UART_UartGetChar()) == 0u);
@@ -98,16 +100,27 @@ CY_ISR(UART_SCB_IRQ_Interrupt)
         UART_SCB_IRQ_Interrupt_InterruptCallback();
     #endif /* UART_SCB_IRQ_INTERRUPT_INTERRUPT_CALLBACK */
     /*  Place your Interrupt code here. */
-   ch = UART_UartGetByte();
-    if(ch == 0x05) {
+//   ch = UART_UartGetByte();
+    read_nchar(1, rbuf);
+    if(rbuf[0] == 0x05) {
+        
+        //ch = UART_UartGetByte();
         read_nchar(1, rbuf);
         if(rbuf[0] == 0x00) {
             //再读298字节
-            read_nchar(298, rbuf);
+            read_nchar(270, rbuf);
+            
             memset(rid, 0, 9);
             memcpy(rid, rbuf+26, 9);
-           // UART_UartPutString(rid);
+            //UART_UartPutString(rid);
+
+           // UART_UartPutChar(rbuf[26]);
+           // UART_UartPutString("\r\n");
             if( strcmp(rid, dc.device_id) == 0) {
+//                UART_UartPutString("ss\r\n");
+//                UART_UartPutString("\r\n");
+//                UART_UartPutChar(rbuf[67]+48);
+//                UART_UartPutString("\r\n");
                 if(rbuf[67]==2) {  
                     //关 P2.5 给高
                     dc.attrs[0].data = 2;
@@ -127,8 +140,9 @@ CY_ISR(UART_SCB_IRQ_Interrupt)
         }      
     }
     
-    CyDelay(100);
+    //CyDelay(100);
     UART_SpiUartClearRxBuffer();//清除串口接收缓冲区
+    bzero(rbuf, BZ);
     UART_ClearRxInterruptSource(UART_INTR_RX_NOT_EMPTY);//清除串口接收中断标志位,这个很重要如果没有清除的话会无限进入串口接收中断函数即UART_SCB_IRQ_Interrupt函数
     
     /* `#END` */

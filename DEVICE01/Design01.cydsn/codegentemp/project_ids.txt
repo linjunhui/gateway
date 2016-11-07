@@ -1,5 +1,5 @@
-C:\Users\Administrator\Documents\PSoC Creator\DEVICE01\Design01.cydsn\Design01.cyprj|9c9f850a-b0a0-4358-bdb8-1e43bea5114a
-D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|058d182b-609b-4141-9330-e733dcd8a0a7
-D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|48af9ab4-885f-4a26-b9bc-b665466d3c4c
-D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|806f4773-afb3-4262-9b57-c4af1d20aa37
-D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|55ae3233-523f-4ac3-a419-59a99b38f440
+E:\gateway\gateway\DEVICE01\Design01.cydsn\Design01.cyprj|d65d1937-1ea2-4551-899d-8842f3f2a755
+D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|cc9d85b1-4ea1-4d73-85d5-0cc152921731
+D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|eed9d492-4f2e-4078-a5d9-a9e698af2e9e
+D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|e162896e-9c2e-4cb6-8629-15e561316a99
+D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|52677e98-f7c5-4ed7-b6b5-baed4a1bb65f

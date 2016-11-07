@@ -1,4 +1,4 @@
-C:\Users\Administrator\Documents\PSoC Creator\DEVICE01\Design01.cydsn\TopDesign\TopDesign.cysch
+E:\gateway\gateway\DEVICE01\Design01.cydsn\TopDesign\TopDesign.cysch
 D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\SCB_P4_v3_10\SCB_P4_v3_10.cysym
 D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\SCB_P4_v3_10\SCB_P4_v3_10.pdf
 D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\SCB_P4_v3_10\SCB_P4_v3_10.cycdx
@@ -337,7 +337,7 @@ D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cyli
 D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\cy_isr_v1_70\Custom\custom.cs
 D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\cy_isr_v1_70\PSoC4\API\intc.c
 D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\cy_isr_v1_70\PSoC4\API\intc.h
-C:\Users\Administrator\Documents\PSoC Creator\DEVICE01\Design01.cydsn\Design01.cydwr
+E:\gateway\gateway\DEVICE01\Design01.cydsn\Design01.cydwr
 D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\cy_boot_v5_30\PSoC4\API\cm0gcc.ld
 D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\cy_boot_v5_30\PSoC4\API\Cm0RealView.scat
 D:\cyp\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\cy_boot_v5_30\PSoC4\API\Cm0Start.c

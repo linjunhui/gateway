@@ -164,7 +164,7 @@ CY_ISR(UART_SCB_IRQ_Interrupt)
 
     /*  Place your Interrupt code here. */
     /* `#START UART_SCB_IRQ_Interrupt` */
-//
+////
     /* `#END` */
 }
 
